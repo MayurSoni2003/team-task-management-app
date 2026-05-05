@@ -1,7 +1,25 @@
 import axios from 'axios';
 
+const rawApiUrl = import.meta.env.VITE_API_URL?.trim();
+
+const normalizeApiBaseUrl = (url) => {
+  if (!url) return null;
+
+  const withoutTrailingSlashes = url.replace(/\/+$/, '');
+  return withoutTrailingSlashes.endsWith('/api')
+    ? withoutTrailingSlashes
+    : `${withoutTrailingSlashes}/api`;
+};
+
+const baseURL = normalizeApiBaseUrl(rawApiUrl)
+  || (import.meta.env.DEV ? 'http://localhost:5000/api' : null);
+
+if (!baseURL) {
+  console.error('Missing VITE_API_URL in production. Set it to your Railway backend public URL.');
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', // Uses env var in production, local fallback
+  baseURL: baseURL || '/api',
 });
 
 // Add a request interceptor to attach JWT token
@@ -25,7 +43,7 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       // Redirecting to login is usually handled in the UI layer or via window.location here
-      // window.location.href = '/login'; 
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }
