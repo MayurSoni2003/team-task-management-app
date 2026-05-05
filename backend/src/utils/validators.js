@@ -32,7 +32,7 @@ const createTaskSchema = z.object({
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
     dueDate: z.string().datetime().optional().or(z.date().optional()),
     projectId: z.string().uuid('Valid Project ID is required'),
-    assignedTo: z.string().uuid('Valid assignedTo UUID is required'),
+    assignedTo: z.string().uuid('Valid assignedTo UUID is required').optional(),
   }),
 });
 
