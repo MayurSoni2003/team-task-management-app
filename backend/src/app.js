@@ -8,6 +8,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('API is running 🚀');
+});
+
+app.get('/api', (req, res) => {
+  res.json({ success: true, message: 'API root working' });
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/projects', require('./routes/project.routes'));
