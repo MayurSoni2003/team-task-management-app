@@ -5,9 +5,11 @@ require('dotenv').config();
 const app = express();
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(u => u.trim()) : []),
   'http://localhost:5173',
 ].filter(Boolean);
+
+console.log('Allowed CORS origins:', allowedOrigins);
 
 // Middleware
 app.use(cors({

@@ -15,8 +15,13 @@ const baseURL = normalizeApiBaseUrl(rawApiUrl)
   || (import.meta.env.DEV ? 'http://localhost:5000/api' : null);
 
 if (!baseURL) {
-  console.error('Missing VITE_API_URL in production. Set it to your Railway backend public URL.');
+  console.error(
+    '%c[FATAL] VITE_API_URL is not set! All API calls will fail. Set it in Railway env vars and REDEPLOY.',
+    'color: red; font-weight: bold; font-size: 16px;'
+  );
 }
+
+console.log('[API] baseURL resolved to:', baseURL || '/api (FALLBACK - LIKELY BROKEN)');
 
 const api = axios.create({
   baseURL: baseURL || '/api',
